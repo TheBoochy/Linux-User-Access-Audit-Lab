@@ -46,7 +46,7 @@ The goals of this lab are to:
 | Part 1  | Repository setup                | Complete |
 | Part 2  | Linux account baseline          | Complete |
 | Part 3  | Create test users and groups    | Complete |
-| Part 4  | Review user and group files     | Planned  |
+| Part 4  | Review user and group files     | Complete |
 | Part 5  | Audit sudo access               | Planned  |
 | Part 6  | Check home folder permissions   | Planned  |
 | Part 7  | Create and find an access issue | Planned  |
@@ -74,7 +74,11 @@ Linux-User-Access-Audit-Lab/
 │   ├── screenshot-02d-linux-account-baseline-sudo-access.png
 │   ├── screenshot-02e-linux-account-baseline-home-folders.png
 │   ├── screenshot-03a-linux-test-users-and-groups-created.png
-│   └── screenshot-03b-linux-test-users-home-folders.png
+│   ├── screenshot-03b-linux-test-users-home-folders.png
+│   ├── screenshot-04a-linux-passwd-file-review.png
+│   ├── screenshot-04b-linux-group-file-review.png
+│   ├── screenshot-04c-linux-sensitive-account-files-review.png
+│   └── screenshot-04d-linux-account-files-purpose.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -99,7 +103,9 @@ Home folder ownership and permissions were reviewed with `ls`.
 
 Test users and groups were created for access audit scenarios. The lab users `audituser`, `contractor1` and `olduser` were verified. The groups `audit_team`, `contractors` and `disabled_test` were also verified. The `audituser` account was added to the `audit_team` group, `contractor1` was added to the `contractors` group, and `olduser` was added to the `disabled_test` group.
 
-The next step is to review user and group database files.
+User and group database files were reviewed. The `/etc/passwd` and `/etc/group` files were checked safely, and the lab user and group entries were reviewed with `getent`. Sensitive account files `/etc/shadow` and `/etc/gshadow` were reviewed safely by checking file ownership and permissions only, without exposing sensitive file contents.
+
+The next step is to audit sudo access.
 
 ---
 
@@ -113,6 +119,9 @@ This project will demonstrate:
 * Linux user creation
 * Linux group creation
 * Linux account verification
+* Linux account database review
+* Linux group database review
+* Safe review of sensitive account files
 * Account baseline documentation
 * Sudo access review
 * Home folder permission review
@@ -138,16 +147,20 @@ Screenshot evidence is stored in the `screenshots/` folder.
 
 Current screenshot evidence:
 
-| Screenshot                                               | Purpose                                            |
-| -------------------------------------------------------- | -------------------------------------------------- |
-| `screenshot-01-project-structure.png`                    | Initial project structure                          |
-| `screenshot-02a-linux-account-baseline-system-info.png`  | Linux account baseline system information          |
-| `screenshot-02b-linux-account-baseline-users.png`        | Local user database review                         |
-| `screenshot-02c-linux-account-baseline-groups.png`       | Local group database review                        |
-| `screenshot-02d-linux-account-baseline-sudo-access.png`  | Current user sudo access review                    |
-| `screenshot-02e-linux-account-baseline-home-folders.png` | Home folder ownership and permission review        |
-| `screenshot-03a-linux-test-users-and-groups-created.png` | Test users and groups created and verified         |
-| `screenshot-03b-linux-test-users-home-folders.png`       | Test user passwd entries and home folders verified |
+| Screenshot                                                | Purpose                                            |
+| --------------------------------------------------------- | -------------------------------------------------- |
+| `screenshot-01-project-structure.png`                     | Initial project structure                          |
+| `screenshot-02a-linux-account-baseline-system-info.png`   | Linux account baseline system information          |
+| `screenshot-02b-linux-account-baseline-users.png`         | Local user database review                         |
+| `screenshot-02c-linux-account-baseline-groups.png`        | Local group database review                        |
+| `screenshot-02d-linux-account-baseline-sudo-access.png`   | Current user sudo access review                    |
+| `screenshot-02e-linux-account-baseline-home-folders.png`  | Home folder ownership and permission review        |
+| `screenshot-03a-linux-test-users-and-groups-created.png`  | Test users and groups created and verified         |
+| `screenshot-03b-linux-test-users-home-folders.png`        | Test user passwd entries and home folders verified |
+| `screenshot-04a-linux-passwd-file-review.png`             | `/etc/passwd` file and test user entries reviewed  |
+| `screenshot-04b-linux-group-file-review.png`              | `/etc/group` file and test group entries reviewed  |
+| `screenshot-04c-linux-sensitive-account-files-review.png` | Sensitive account file permissions reviewed safely |
+| `screenshot-04d-linux-account-files-purpose.png`          | Account file purpose summary reviewed              |
 
 Command results and verification output may be stored in:
 
@@ -314,6 +327,79 @@ Screenshot links:
 [screenshot-03a-linux-test-users-and-groups-created.png](screenshots/screenshot-03a-linux-test-users-and-groups-created.png)
 
 [screenshot-03b-linux-test-users-home-folders.png](screenshots/screenshot-03b-linux-test-users-home-folders.png)
+
+---
+
+## Part 4 — Review user and group files
+
+Status: Complete
+
+This part reviewed Linux user and group database files used for local account and access management.
+
+Files reviewed:
+
+```text
+/etc/passwd
+/etc/group
+/etc/shadow
+/etc/gshadow
+```
+
+Commands used:
+
+```bash
+ls -l /etc/passwd
+getent passwd audituser
+getent passwd contractor1
+getent passwd olduser
+
+ls -l /etc/group
+getent group audit_team
+getent group contractors
+getent group disabled_test
+
+sudo ls -l /etc/shadow
+sudo ls -l /etc/gshadow
+
+echo "/etc/passwd stores local user account information."
+echo "/etc/group stores local group information."
+echo "/etc/shadow stores local password hash and password aging information."
+echo "/etc/gshadow stores secure group account information."
+```
+
+Results:
+
+* Reviewed `/etc/passwd` ownership and permissions.
+* Reviewed passwd entries for `audituser`, `contractor1` and `olduser`.
+* Reviewed `/etc/group` ownership and permissions.
+* Reviewed group entries for `audit_team`, `contractors` and `disabled_test`.
+* Reviewed `/etc/shadow` ownership and permissions safely.
+* Reviewed `/etc/gshadow` ownership and permissions safely.
+* Confirmed the purpose of the main Linux account database files.
+
+Notes:
+
+The `/etc/passwd` file stores local user account information.
+
+The `/etc/group` file stores local group information.
+
+The `/etc/shadow` file stores password hash and password aging information.
+
+The `/etc/gshadow` file stores secure group account information.
+
+Sensitive files were reviewed safely by checking file permissions only. File contents from `/etc/shadow` and `/etc/gshadow` were not displayed or documented.
+
+The `man 5 passwd` command was not available on this system, so a safe `echo` summary was used instead for the account file purpose screenshot.
+
+Screenshot links:
+
+[screenshot-04a-linux-passwd-file-review.png](screenshots/screenshot-04a-linux-passwd-file-review.png)
+
+[screenshot-04b-linux-group-file-review.png](screenshots/screenshot-04b-linux-group-file-review.png)
+
+[screenshot-04c-linux-sensitive-account-files-review.png](screenshots/screenshot-04c-linux-sensitive-account-files-review.png)
+
+[screenshot-04d-linux-account-files-purpose.png](screenshots/screenshot-04d-linux-account-files-purpose.png)
 
 ---
 

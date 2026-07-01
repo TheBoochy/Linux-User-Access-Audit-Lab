@@ -1,0 +1,411 @@
+# Linux User Access Audit Lab — Logbook
+
+## 2026-07-01 — Part 1: Repository setup
+
+### Goal
+
+Start the Linux User Access Audit Lab by creating the local project structure, initial documentation files and project folders.
+
+### Work completed
+
+* Created the local project folder.
+* Created the main documentation folders:
+
+  * docs
+  * screenshots
+  * scripts
+  * results
+* Created `README.md`.
+* Created `logbook.md`.
+* Created `.gitkeep` files so Git can track empty folders.
+* Opened the project in VS Code.
+* Saved screenshot evidence.
+
+### Project structure
+
+```text
+Linux-User-Access-Audit-Lab/
+├── docs/
+│   └── .gitkeep
+├── results/
+│   └── .gitkeep
+├── screenshots/
+│   └── .gitkeep
+├── scripts/
+│   └── .gitkeep
+├── logbook.md
+└── README.md
+```
+
+### Commands used
+
+```powershell
+cd C:\Users\*****
+mkdir Linux-User-Access-Audit-Lab
+cd Linux-User-Access-Audit-Lab
+
+mkdir docs
+mkdir screenshots
+mkdir scripts
+mkdir results
+
+New-Item README.md
+New-Item logbook.md
+
+New-Item docs\.gitkeep
+New-Item screenshots\.gitkeep
+New-Item scripts\.gitkeep
+New-Item results\.gitkeep
+
+code .
+```
+
+### Command purpose
+
+| Command                             | Purpose                                                |
+| ----------------------------------- | ------------------------------------------------------ |
+| `cd C:\Users\*****`                 | Moves PowerShell to the user folder.                   |
+| `mkdir Linux-User-Access-Audit-Lab` | Creates the main project folder.                       |
+| `cd Linux-User-Access-Audit-Lab`    | Moves into the project folder.                         |
+| `mkdir docs`                        | Creates the documentation folder.                      |
+| `mkdir screenshots`                 | Creates the screenshot evidence folder.                |
+| `mkdir scripts`                     | Creates the script storage folder.                     |
+| `mkdir results`                     | Creates the command output and result storage folder.  |
+| `New-Item README.md`                | Creates the main README file.                          |
+| `New-Item logbook.md`               | Creates the project logbook file.                      |
+| `New-Item .gitkeep`                 | Creates placeholder files so Git tracks empty folders. |
+| `code .`                            | Opens the current project folder in VS Code.           |
+
+### Notes
+
+This part created the documentation base for the Linux User Access Audit Lab.
+
+The project will continue with a Linux account baseline before users, groups or access audit scenarios are created.
+
+Only safe lab data should be used in this project. No real secrets, credentials, private files or production data should be included.
+
+### Evidence
+
+Screenshot:
+
+![screenshot-01-project-structure.png](screenshots/screenshot-01-project-structure.png)
+
+---
+
+## 2026-07-01 — Part 2: Linux account baseline
+
+### Goal
+
+Review the Linux account baseline before creating users, groups or access audit scenarios.
+
+### Work completed
+
+* Reviewed hostname and system information.
+* Verified the current logged-in user.
+* Reviewed user ID and group membership information.
+* Reviewed the Linux operating system version.
+* Reviewed the kernel version.
+* Reviewed current date and uptime.
+* Reviewed local user database entries.
+* Reviewed local group database entries.
+* Reviewed current user group membership.
+* Reviewed current user sudo privileges.
+* Reviewed `/home` directory ownership and permissions.
+* Reviewed existing home folders.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                | Result                          |
+| ------------------- | ------------------------------- |
+| System identity     | Reviewed with `hostnamectl`     |
+| Current user        | Reviewed with `whoami`          |
+| User and groups     | Reviewed with `id`              |
+| OS version          | Reviewed with `/etc/os-release` |
+| Kernel version      | Reviewed with `uname -r`        |
+| Date and uptime     | Reviewed                        |
+| Local users         | Reviewed with `getent passwd`   |
+| Local groups        | Reviewed with `getent group`    |
+| Current user groups | Reviewed with `groups`          |
+| Sudo access         | Reviewed with `sudo -l`         |
+| Home folders        | Reviewed with `ls`              |
+
+### Commands used
+
+```bash
+hostnamectl
+whoami
+id
+cat /etc/os-release
+uname -r
+date
+uptime
+
+getent passwd | head -20
+getent passwd | tail -20
+
+getent group | head -20
+getent group | tail -20
+
+groups
+sudo -l
+
+ls -ld /home
+ls -l /home
+```
+
+### Command purpose
+
+| Command                     | Purpose                                                    |
+| --------------------------- | ---------------------------------------------------------- |
+| `hostnamectl`               | Shows hostname, operating system, kernel and architecture. |
+| `whoami`                    | Shows the current logged-in user.                          |
+| `id`                        | Shows user ID, group ID and group memberships.             |
+| `cat /etc/os-release`       | Shows the Linux distribution and version.                  |
+| `uname -r`                  | Shows the running kernel version.                          |
+| `date`                      | Shows the current system date and time.                    |
+| `uptime`                    | Shows how long the system has been running.                |
+| `getent passwd \| head -20` | Shows the first local user database entries.               |
+| `getent passwd \| tail -20` | Shows the last local user database entries.                |
+| `getent group \| head -20`  | Shows the first local group database entries.              |
+| `getent group \| tail -20`  | Shows the last local group database entries.               |
+| `groups`                    | Shows the current user’s group memberships.                |
+| `sudo -l`                   | Shows what sudo privileges the current user has.           |
+| `ls -ld /home`              | Shows ownership and permissions for `/home`.               |
+| `ls -l /home`               | Lists existing home folders.                               |
+
+### Notes
+
+This baseline check gives the project a clean starting point before test users and access audit scenarios are created.
+
+The review confirms the current account state before changes are made.
+
+The commands used in this part are useful for Linux helpdesk, junior sysadmin and basic access review work.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-02a-linux-account-baseline-system-info.png](screenshots/screenshot-02a-linux-account-baseline-system-info.png)
+
+![screenshot-02b-linux-account-baseline-users.png](screenshots/screenshot-02b-linux-account-baseline-users.png)
+
+![screenshot-02c-linux-account-baseline-groups.png](screenshots/screenshot-02c-linux-account-baseline-groups.png)
+
+![screenshot-02d-linux-account-baseline-sudo-access.png](screenshots/screenshot-02d-linux-account-baseline-sudo-access.png)
+
+![screenshot-02e-linux-account-baseline-home-folders.png](screenshots/screenshot-02e-linux-account-baseline-home-folders.png)
+
+---
+
+## 2026-07-01 — Part 3: Create test users and groups
+
+### Goal
+
+Create and verify safe test users and groups for Linux access audit scenarios.
+
+### Work completed
+
+* Created or verified the `audit_team` group.
+* Created or verified the `contractors` group.
+* Created or verified the `disabled_test` group.
+* Verified the `audituser` test account.
+* Created and verified the `contractor1` test account.
+* Created and verified the `olduser` test account.
+* Added `audituser` to the `audit_team` group.
+* Added `contractor1` to the `contractors` group.
+* Added `olduser` to the `disabled_test` group.
+* Set safe lab passwords for the test users.
+* Verified user IDs and group memberships.
+* Verified group database entries.
+* Verified passwd database entries.
+* Verified home folder ownership and permissions.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                           | Result               |
+| ------------------------------ | -------------------- |
+| Group `audit_team`             | Created or verified  |
+| Group `contractors`            | Created or verified  |
+| Group `disabled_test`          | Created or verified  |
+| User `audituser`               | Verified             |
+| User `contractor1`             | Created and verified |
+| User `olduser`                 | Created and verified |
+| `audituser` group membership   | `audit_team`         |
+| `contractor1` group membership | `contractors`        |
+| `olduser` group membership     | `disabled_test`      |
+| Home folders                   | Verified             |
+
+### Commands used
+
+```bash
+sudo groupadd audit_team
+sudo groupadd contractors
+sudo groupadd disabled_test
+
+sudo useradd -m -G audit_team audituser
+sudo useradd -m -G contractors contractor1
+sudo useradd -m -G disabled_test olduser
+
+sudo usermod -aG audit_team audituser
+
+sudo passwd audituser
+sudo passwd contractor1
+sudo passwd olduser
+
+id audituser
+id contractor1
+id olduser
+
+getent group audit_team
+getent group contractors
+getent group disabled_test
+
+getent passwd audituser
+getent passwd contractor1
+getent passwd olduser
+
+ls -ld /home/audituser
+ls -ld /home/contractor1
+ls -ld /home/olduser
+```
+
+### Command purpose
+
+| Command                                      | Purpose                                                                                                |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `sudo groupadd audit_team`                   | Creates the audit team group.                                                                          |
+| `sudo groupadd contractors`                  | Creates the contractors group.                                                                         |
+| `sudo groupadd disabled_test`                | Creates the disabled test group.                                                                       |
+| `sudo useradd -m -G audit_team audituser`    | Creates `audituser` with a home folder and adds it to `audit_team` if the user does not already exist. |
+| `sudo useradd -m -G contractors contractor1` | Creates `contractor1` with a home folder and adds it to `contractors`.                                 |
+| `sudo useradd -m -G disabled_test olduser`   | Creates `olduser` with a home folder and adds it to `disabled_test`.                                   |
+| `sudo usermod -aG audit_team audituser`      | Adds the existing `audituser` account to the `audit_team` group.                                       |
+| `sudo passwd audituser`                      | Sets a safe lab password for `audituser`.                                                              |
+| `sudo passwd contractor1`                    | Sets a safe lab password for `contractor1`.                                                            |
+| `sudo passwd olduser`                        | Sets a safe lab password for `olduser`.                                                                |
+| `id audituser`                               | Shows user ID and group memberships for `audituser`.                                                   |
+| `id contractor1`                             | Shows user ID and group memberships for `contractor1`.                                                 |
+| `id olduser`                                 | Shows user ID and group memberships for `olduser`.                                                     |
+| `getent group audit_team`                    | Shows the `audit_team` group entry and members.                                                        |
+| `getent group contractors`                   | Shows the `contractors` group entry and members.                                                       |
+| `getent group disabled_test`                 | Shows the `disabled_test` group entry and members.                                                     |
+| `getent passwd audituser`                    | Shows the passwd database entry for `audituser`.                                                       |
+| `getent passwd contractor1`                  | Shows the passwd database entry for `contractor1`.                                                     |
+| `getent passwd olduser`                      | Shows the passwd database entry for `olduser`.                                                         |
+| `ls -ld /home/audituser`                     | Shows ownership and permissions for the `audituser` home folder.                                       |
+| `ls -ld /home/contractor1`                   | Shows ownership and permissions for the `contractor1` home folder.                                     |
+| `ls -ld /home/olduser`                       | Shows ownership and permissions for the `olduser` home folder.                                         |
+
+### Notes
+
+The test users and groups are used only for safe lab access audit practice.
+
+The `audituser` account already existed in the lab environment, so the account was verified and added to the `audit_team` group.
+
+The `audituser` account also belongs to the `auditors` group, which provides useful audit evidence for later group membership review.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-03a-linux-test-users-and-groups-created.png](screenshots/screenshot-03a-linux-test-users-and-groups-created.png)
+
+![screenshot-03b-linux-test-users-home-folders.png](screenshots/screenshot-03b-linux-test-users-home-folders.png)
+
+---
+
+## 2026-07-01 — Part 4: Review user and group files
+
+### Goal
+
+Review Linux user and group database files used for local account and access management.
+
+### Work completed
+
+* Reviewed `/etc/passwd` ownership and permissions.
+* Reviewed passwd entries for `audituser`, `contractor1` and `olduser`.
+* Reviewed `/etc/group` ownership and permissions.
+* Reviewed group entries for `audit_team`, `contractors` and `disabled_test`.
+* Reviewed `/etc/shadow` ownership and permissions safely.
+* Reviewed `/etc/gshadow` ownership and permissions safely.
+* Confirmed the purpose of the main Linux account database files.
+* Used a safe text summary because `man 5 passwd` was not available on the system.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item                       | Result          |
+| -------------------------- | --------------- |
+| `/etc/passwd` permissions  | Reviewed        |
+| Test user passwd entries   | Reviewed        |
+| `/etc/group` permissions   | Reviewed        |
+| Test group entries         | Reviewed        |
+| `/etc/shadow` permissions  | Reviewed safely |
+| `/etc/gshadow` permissions | Reviewed safely |
+| Account file purpose       | Reviewed        |
+| Sensitive contents exposed | No              |
+
+### Commands used
+
+```bash
+ls -l /etc/passwd
+getent passwd audituser
+getent passwd contractor1
+getent passwd olduser
+
+ls -l /etc/group
+getent group audit_team
+getent group contractors
+getent group disabled_test
+
+sudo ls -l /etc/shadow
+sudo ls -l /etc/gshadow
+
+echo "/etc/passwd stores local user account information."
+echo "/etc/group stores local group information."
+echo "/etc/shadow stores local password hash and password aging information."
+echo "/etc/gshadow stores secure group account information."
+```
+
+### Command purpose
+
+| Command                      | Purpose                                                                                         |
+| ---------------------------- | ----------------------------------------------------------------------------------------------- |
+| `ls -l /etc/passwd`          | Shows ownership and permissions for the local user account database file.                       |
+| `getent passwd audituser`    | Shows the passwd entry for `audituser`.                                                         |
+| `getent passwd contractor1`  | Shows the passwd entry for `contractor1`.                                                       |
+| `getent passwd olduser`      | Shows the passwd entry for `olduser`.                                                           |
+| `ls -l /etc/group`           | Shows ownership and permissions for the local group database file.                              |
+| `getent group audit_team`    | Shows the `audit_team` group entry and members.                                                 |
+| `getent group contractors`   | Shows the `contractors` group entry and members.                                                |
+| `getent group disabled_test` | Shows the `disabled_test` group entry and members.                                              |
+| `sudo ls -l /etc/shadow`     | Shows ownership and permissions for the shadow password file without exposing password hashes.  |
+| `sudo ls -l /etc/gshadow`    | Shows ownership and permissions for the secure group file without exposing sensitive contents.  |
+| `echo ...`                   | Provides a safe summary of the account file purposes because man page lookup was not available. |
+
+### Notes
+
+This part reviewed the main Linux account database files.
+
+The `/etc/passwd` file stores local user account information.
+
+The `/etc/group` file stores local group information.
+
+The `/etc/shadow` file stores password hash and password aging information.
+
+The `/etc/gshadow` file stores secure group account information.
+
+Sensitive files were reviewed safely by checking file permissions only. The contents of `/etc/shadow` and `/etc/gshadow` were not displayed or documented.
+
+### Evidence
+
+Screenshots:
+
+
+![screenshot-04b-linux-group-file-review.png](screenshots/screenshot-04b-linux-group-file-review.png)
+
+![screenshot-04c-linux-sensitive-account-files-review.png](screenshots/screenshot-04c-linux-sensitive-account-files-review.png)
+
+![screenshot-04d-linux-account-files-purpose.png](screenshots/screenshot-04d-linux-account-files-purpose.png)
