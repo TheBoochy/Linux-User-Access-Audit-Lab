@@ -708,6 +708,8 @@ In a real environment, this type of issue should be reviewed and corrected if th
 
 Screenshots:
 
+![screenshot-07a-linux-audit-share-created.png](screenshots/screenshot-07a-linux-audit-share-created.png)
+
 ![screenshot-07b-linux-audit-share-test-file-created.png](screenshots/screenshot-07b-linux-audit-share-test-file-created.png)
 
 ![screenshot-07c-linux-audit-share-cross-user-access.png](screenshots/screenshot-07c-linux-audit-share-cross-user-access.png)
@@ -715,4 +717,98 @@ Screenshots:
 ![screenshot-07d-linux-audit-share-issue-identified.png](screenshots/screenshot-07d-linux-audit-share-issue-identified.png)
 
 ![screenshot-07e-linux-audit-share-finding-note.png](screenshots/screenshot-07e-linux-audit-share-finding-note.png)
+
+---
+
+## 2026-07-02 — Part 8: Review login history
+
+### Goal
+
+Review successful login history, current sessions and last login information.
+
+### Work completed
+
+* Reviewed recent successful login history.
+* Reviewed login history for `audituser`.
+* Reviewed login history for `contractor1`.
+* Reviewed login history for `olduser`.
+* Reviewed currently logged-in users.
+* Reviewed active login sessions and activity.
+* Reviewed last login summary for local accounts.
+* Created an audit note about login history review.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item | Result |
+| --- | --- |
+| Recent successful logins | Reviewed |
+| `audituser` login history | Reviewed |
+| `contractor1` login history | Reviewed |
+| `olduser` login history | Reviewed |
+| Current login sessions | Reviewed |
+| Last login summary | Reviewed |
+| Audit note | Created |
+| Sensitive data exposed | No |
+
+### Commands used
+
+```bash
+last | head -20
+
+last audituser | head -10
+last contractor1 | head -10
+last olduser | head -10
+
+who
+w
+
+lastlog | head -20
+
+echo "Successful login history was reviewed with last."
+echo "Current active sessions were reviewed with who and w."
+echo "Last login summary was reviewed with lastlog."
+echo "Unused or unexpected accounts should be reviewed in a real environment."
+```
+
+### Command purpose
+
+| Command | Purpose |
+| --- | --- |
+| `last \| head -20` | Shows the most recent successful login records while keeping the output short. |
+| `last audituser \| head -10` | Shows successful login history for `audituser`. |
+| `last contractor1 \| head -10` | Shows successful login history for `contractor1`. |
+| `last olduser \| head -10` | Shows successful login history for `olduser`. |
+| `who` | Shows currently logged-in users. |
+| `w` | Shows currently logged-in users, active sessions, idle time and current activity. |
+| `lastlog \| head -20` | Shows last login information for local accounts while keeping the output readable. |
+| `echo ...` | Creates a clear audit note about login history review. |
+
+### Notes
+
+This part demonstrates basic Linux login history review.
+
+Successful login history helps show which accounts accessed the system and when.
+
+Current session review helps identify users who are logged in right now.
+
+The last login summary helps identify accounts that have never logged in or have not logged in recently.
+
+Private internal lab IP addresses may appear in login history when using a VM, NAT or local lab network. These addresses are not public internet addresses.
+
+In a real environment, unexpected login times, unknown source addresses, unused accounts with recent logins, or abandoned accounts should be reviewed.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-08a-linux-recent-login-history.png](screenshots/screenshot-08a-linux-recent-login-history.png)
+
+![screenshot-08b-linux-test-user-login-history.png](screenshots/screenshot-08b-linux-test-user-login-history.png)
+
+![screenshot-08c-linux-current-login-sessions.png](screenshots/screenshot-08c-linux-current-login-sessions.png)
+
+![screenshot-08d-linux-lastlog-summary.png](screenshots/screenshot-08d-linux-lastlog-summary.png)
+
+![screenshot-08e-linux-login-history-audit-note.png](screenshots/screenshot-08e-linux-login-history-audit-note.png)
 

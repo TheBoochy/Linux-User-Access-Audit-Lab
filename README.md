@@ -50,7 +50,7 @@ The goals of this lab are to:
 | Part 5  | Audit sudo access               | Complete |
 | Part 6  | Check home folder permissions   | Complete |
 | Part 7  | Create and find an access issue | Complete |
-| Part 8  | Review login history            | Planned  |
+| Part 8  | Review login history            | Complete |
 | Part 9  | Review failed login attempts    | Planned  |
 | Part 10 | Create access audit report      | Planned  |
 | Part 11 | Final README and GitHub polish  | Planned  |
@@ -91,7 +91,12 @@ Linux-User-Access-Audit-Lab/
 │   ├── screenshot-07b-linux-audit-share-test-file-created.png
 │   ├── screenshot-07c-linux-audit-share-cross-user-access.png
 │   ├── screenshot-07d-linux-audit-share-issue-identified.png
-│   └── screenshot-07e-linux-audit-share-finding-note.png
+│   ├── screenshot-07e-linux-audit-share-finding-note.png
+│   ├── screenshot-08a-linux-recent-login-history.png
+│   ├── screenshot-08b-linux-test-user-login-history.png
+│   ├── screenshot-08c-linux-current-login-sessions.png
+│   ├── screenshot-08d-linux-lastlog-summary.png
+│   └── screenshot-08e-linux-login-history-audit-note.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -124,7 +129,9 @@ Home folder permissions were reviewed for `audituser`, `contractor1` and `olduse
 
 A controlled access issue was created and identified. The `/opt/audit-share` folder and `audit-note.txt` file were configured with permissions that allowed users outside the intended `audit_team` group to read the test file. The issue was verified by testing access as multiple users and documented as a finding with risk and recommendation notes.
 
-The next step is to review login history.
+Successful login history was reviewed with `last`. Login history for the lab users was reviewed, current active sessions were checked with `who` and `w`, and the last login summary was reviewed with `lastlog`.
+
+The next step is to review failed login attempts.
 
 ---
 
@@ -155,6 +162,9 @@ This project will demonstrate:
 * Shared folder permission review
 * Access issue identification
 * Finding, risk and recommendation documentation
+* Successful login history review
+* Current session review
+* Last login summary review
 * Markdown documentation
 * Screenshot-based evidence collection
 * Git and GitHub workflow
@@ -196,6 +206,16 @@ Current screenshot evidence:
 | `screenshot-06b-linux-home-folder-content-review.png` | Home folder contents reviewed safely |
 | `screenshot-06c-linux-home-folder-cross-access-test.png` | Cross-user home folder access tested |
 | `screenshot-06d-linux-home-folder-audit-note.png` | Home folder audit note created |
+| `screenshot-07a-linux-audit-share-created.png` | Controlled audit share folder created |
+| `screenshot-07b-linux-audit-share-test-file-created.png` | Audit share test file created |
+| `screenshot-07c-linux-audit-share-cross-user-access.png` | Cross-user access to audit share tested |
+| `screenshot-07d-linux-audit-share-issue-identified.png` | Audit share access issue identified |
+| `screenshot-07e-linux-audit-share-finding-note.png` | Finding, risk and recommendation documented |
+| `screenshot-08a-linux-recent-login-history.png` | Recent successful login history reviewed |
+| `screenshot-08b-linux-test-user-login-history.png` | Test user login history reviewed |
+| `screenshot-08c-linux-current-login-sessions.png` | Current login sessions reviewed |
+| `screenshot-08d-linux-lastlog-summary.png` | Last login summary reviewed |
+| `screenshot-08e-linux-login-history-audit-note.png` | Login history audit note created |
 
 Command results and verification output may be stored in:
 
@@ -649,6 +669,73 @@ Screenshot links:
 [screenshot-07d-linux-audit-share-issue-identified.png](screenshots/screenshot-07d-linux-audit-share-issue-identified.png)
 
 [screenshot-07e-linux-audit-share-finding-note.png](screenshots/screenshot-07e-linux-audit-share-finding-note.png)
+
+
+---
+
+## Part 8 — Review login history
+
+Status: Complete
+
+This part reviewed successful login history, current sessions and last login information.
+
+Commands used:
+
+```bash
+last | head -20
+
+last audituser | head -10
+last contractor1 | head -10
+last olduser | head -10
+
+who
+w
+
+lastlog | head -20
+
+echo "Successful login history was reviewed with last."
+echo "Current active sessions were reviewed with who and w."
+echo "Last login summary was reviewed with lastlog."
+echo "Unused or unexpected accounts should be reviewed in a real environment."
+```
+
+Results:
+
+* Reviewed recent successful login history with `last`.
+* Reviewed login history for `audituser`.
+* Reviewed login history for `contractor1`.
+* Reviewed login history for `olduser`.
+* Reviewed currently logged-in users with `who`.
+* Reviewed active sessions and activity with `w`.
+* Reviewed last login summary with `lastlog`.
+* Created an audit note about login history review.
+* Confirmed that private internal lab IP addresses may appear in login history output.
+
+Notes:
+
+This part demonstrates basic Linux login history review.
+
+The `last` command shows successful login history from system login records.
+
+The `who` and `w` commands show currently logged-in users and active sessions.
+
+The `lastlog` command shows the most recent login status for local accounts.
+
+Private internal lab addresses, such as addresses in the `192.168.x.x` range, may appear in login history when using a local VM, NAT or lab network.
+
+In a real environment, unexpected login times, unknown source addresses, unused accounts with recent logins, or abandoned accounts should be reviewed.
+
+Screenshot links:
+
+[screenshot-08a-linux-recent-login-history.png](screenshots/screenshot-08a-linux-recent-login-history.png)
+
+[screenshot-08b-linux-test-user-login-history.png](screenshots/screenshot-08b-linux-test-user-login-history.png)
+
+[screenshot-08c-linux-current-login-sessions.png](screenshots/screenshot-08c-linux-current-login-sessions.png)
+
+[screenshot-08d-linux-lastlog-summary.png](screenshots/screenshot-08d-linux-lastlog-summary.png)
+
+[screenshot-08e-linux-login-history-audit-note.png](screenshots/screenshot-08e-linux-login-history-audit-note.png)
 
 
 ## Notes
