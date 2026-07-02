@@ -51,7 +51,7 @@ The goals of this lab are to:
 | Part 6  | Check home folder permissions   | Complete |
 | Part 7  | Create and find an access issue | Complete |
 | Part 8  | Review login history            | Complete |
-| Part 9  | Review failed login attempts    | Planned  |
+| Part 9  | Review failed login attempts    | Complete |
 | Part 10 | Create access audit report      | Planned  |
 | Part 11 | Final README and GitHub polish  | Planned  |
 
@@ -96,7 +96,12 @@ Linux-User-Access-Audit-Lab/
 │   ├── screenshot-08b-linux-test-user-login-history.png
 │   ├── screenshot-08c-linux-current-login-sessions.png
 │   ├── screenshot-08d-linux-lastlog-summary.png
-│   └── screenshot-08e-linux-login-history-audit-note.png
+│   ├── screenshot-08e-linux-login-history-audit-note.png
+│   ├── screenshot-09a-linux-failed-login-summary.png
+│   ├── screenshot-09b-linux-test-user-failed-login-review.png
+│   ├── screenshot-09c-linux-ssh-authentication-log-review.png
+│   ├── screenshot-09d-linux-failed-login-tools-review.png
+│   └── screenshot-09e-linux-failed-login-audit-note.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -131,7 +136,9 @@ A controlled access issue was created and identified. The `/opt/audit-share` fol
 
 Successful login history was reviewed with `last`. Login history for the lab users was reviewed, current active sessions were checked with `who` and `w`, and the last login summary was reviewed with `lastlog`.
 
-The next step is to review failed login attempts.
+Failed login attempts were reviewed with `faillock`. Failed login records for the lab users were checked, SSH authentication logs were reviewed with `journalctl`, and the failed-login review tools were verified. A failed-login audit note was created to document the review method and security purpose.
+
+The next step is to create an access audit report.
 
 ---
 
@@ -165,6 +172,9 @@ This project will demonstrate:
 * Successful login history review
 * Current session review
 * Last login summary review
+* Failed login record review
+* SSH authentication log review
+* Failed-login tool verification
 * Markdown documentation
 * Screenshot-based evidence collection
 * Git and GitHub workflow
@@ -736,6 +746,72 @@ Screenshot links:
 [screenshot-08d-linux-lastlog-summary.png](screenshots/screenshot-08d-linux-lastlog-summary.png)
 
 [screenshot-08e-linux-login-history-audit-note.png](screenshots/screenshot-08e-linux-login-history-audit-note.png)
+
+
+---
+
+## Part 9 — Review failed login attempts
+
+Status: Complete
+
+This part reviewed failed login records, SSH authentication logs and failed-login review tools.
+
+Commands used:
+
+```bash
+sudo faillock
+
+sudo faillock --user audituser
+sudo faillock --user contractor1
+sudo faillock --user olduser
+
+sudo journalctl -u sshd --no-pager | tail -30
+
+which faillock
+which journalctl
+sudo faillock --help | head -20
+
+echo "Failed login records were reviewed with faillock."
+echo "SSH authentication logs were reviewed with journalctl."
+echo "Repeated failed logins should be investigated in a real environment."
+echo "Unexpected failed logins may indicate password guessing, old credentials or unauthorized access attempts."
+```
+
+Results:
+
+* Reviewed failed login records with `faillock`.
+* Reviewed failed login records for `audituser`.
+* Reviewed failed login records for `contractor1`.
+* Reviewed failed login records for `olduser`.
+* Reviewed SSH authentication logs with `journalctl`.
+* Verified that the `faillock` tool exists on the system.
+* Verified that the `journalctl` tool exists on the system.
+* Reviewed `faillock` command usage output.
+* Created an audit note about failed login review.
+
+Notes:
+
+This part demonstrates basic failed-login review in Linux.
+
+The `faillock` command is used to review failed authentication records.
+
+The `journalctl` command is used to review systemd journal logs, including SSH-related authentication activity.
+
+On this system, `faillock --help` returned an unknown option message, but it still displayed valid usage information. This was documented as part of tool verification.
+
+In a real environment, repeated failed logins should be investigated because they may indicate password guessing, old saved credentials, misconfigured services or unauthorized access attempts.
+
+Screenshot links:
+
+[screenshot-09a-linux-failed-login-summary.png](screenshots/screenshot-09a-linux-failed-login-summary.png)
+
+[screenshot-09b-linux-test-user-failed-login-review.png](screenshots/screenshot-09b-linux-test-user-failed-login-review.png)
+
+[screenshot-09c-linux-ssh-authentication-log-review.png](screenshots/screenshot-09c-linux-ssh-authentication-log-review.png)
+
+[screenshot-09d-linux-failed-login-tools-review.png](screenshots/screenshot-09d-linux-failed-login-tools-review.png)
+
+[screenshot-09e-linux-failed-login-audit-note.png](screenshots/screenshot-09e-linux-failed-login-audit-note.png)
 
 
 ## Notes

@@ -812,3 +812,101 @@ Screenshots:
 
 ![screenshot-08e-linux-login-history-audit-note.png](screenshots/screenshot-08e-linux-login-history-audit-note.png)
 
+---
+
+## 2026-07-02 — Part 9: Review failed login attempts
+
+### Goal
+
+Review failed login records, SSH authentication logs and failed-login review tools.
+
+### Work completed
+
+* Reviewed failed login records with `faillock`.
+* Reviewed failed login records for `audituser`.
+* Reviewed failed login records for `contractor1`.
+* Reviewed failed login records for `olduser`.
+* Reviewed SSH authentication logs with `journalctl`.
+* Verified the `faillock` command path.
+* Verified the `journalctl` command path.
+* Reviewed `faillock` usage output.
+* Created an audit note about failed login review.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item | Result |
+| --- | --- |
+| Failed login summary | Reviewed |
+| `audituser` failed login records | Reviewed |
+| `contractor1` failed login records | Reviewed |
+| `olduser` failed login records | Reviewed |
+| SSH authentication logs | Reviewed |
+| `faillock` tool | Verified |
+| `journalctl` tool | Verified |
+| Audit note | Created |
+| Sensitive data exposed | No |
+
+### Commands used
+
+```bash
+sudo faillock
+
+sudo faillock --user audituser
+sudo faillock --user contractor1
+sudo faillock --user olduser
+
+sudo journalctl -u sshd --no-pager | tail -30
+
+which faillock
+which journalctl
+sudo faillock --help | head -20
+
+echo "Failed login records were reviewed with faillock."
+echo "SSH authentication logs were reviewed with journalctl."
+echo "Repeated failed logins should be investigated in a real environment."
+echo "Unexpected failed logins may indicate password guessing, old credentials or unauthorized access attempts."
+```
+
+### Command purpose
+
+| Command | Purpose |
+| --- | --- |
+| `sudo faillock` | Shows failed login records tracked by PAM faillock. |
+| `sudo faillock --user audituser` | Shows failed login records for `audituser`. |
+| `sudo faillock --user contractor1` | Shows failed login records for `contractor1`. |
+| `sudo faillock --user olduser` | Shows failed login records for `olduser`. |
+| `sudo journalctl -u sshd --no-pager \| tail -30` | Shows recent SSH daemon log entries from the systemd journal while keeping the output short. |
+| `which faillock` | Shows the path to the `faillock` command. |
+| `which journalctl` | Shows the path to the `journalctl` command. |
+| `sudo faillock --help \| head -20` | Attempts to show `faillock` help or usage output for tool verification. |
+| `echo ...` | Creates a clear audit note about failed login review. |
+
+### Notes
+
+This part demonstrates basic failed-login review in Linux.
+
+Failed login records can help identify repeated authentication failures, password guessing, old saved credentials or unauthorized access attempts.
+
+The `faillock` tool was available at `/usr/sbin/faillock`.
+
+The `journalctl` tool was available at `/usr/bin/journalctl`.
+
+On this system, `faillock --help` returned an unknown option message, but it still displayed valid usage information. This was documented as part of the tool verification screenshot.
+
+In a real environment, repeated or unexpected failed login attempts should be reviewed and investigated.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-09a-linux-failed-login-summary.png](screenshots/screenshot-09a-linux-failed-login-summary.png)
+
+![screenshot-09b-linux-test-user-failed-login-review.png](screenshots/screenshot-09b-linux-test-user-failed-login-review.png)
+
+![screenshot-09c-linux-ssh-authentication-log-review.png](screenshots/screenshot-09c-linux-ssh-authentication-log-review.png)
+
+![screenshot-09d-linux-failed-login-tools-review.png](screenshots/screenshot-09d-linux-failed-login-tools-review.png)
+
+![screenshot-09e-linux-failed-login-audit-note.png](screenshots/screenshot-09e-linux-failed-login-audit-note.png)
+
