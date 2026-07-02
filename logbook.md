@@ -601,3 +601,118 @@ Screenshots:
 ![screenshot-06c-linux-home-folder-cross-access-test.png](screenshots/screenshot-06c-linux-home-folder-cross-access-test.png)
 
 ![screenshot-06d-linux-home-folder-audit-note.png](screenshots/screenshot-06d-linux-home-folder-audit-note.png)
+
+---
+
+## 2026-07-01 — Part 7: Create and identify an access issue
+
+### Goal
+
+Create a controlled permission issue and identify it through Linux access review commands.
+
+### Work completed
+
+* Created the `/opt/audit-share` test folder.
+* Set folder ownership to `root:audit_team`.
+* Set folder permissions to `775`.
+* Created the safe test file `audit-note.txt`.
+* Set file ownership to `root:audit_team`.
+* Set file permissions to `664`.
+* Tested file access as `audituser`.
+* Tested file access as `contractor1`.
+* Tested file access as `olduser`.
+* Reviewed folder permissions, file permissions and user group memberships.
+* Identified that users outside the intended `audit_team` group could read the test file.
+* Documented the finding, risk and recommendation.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item | Result |
+| --- | --- |
+| `/opt/audit-share` folder | Created |
+| Folder ownership | `root:audit_team` |
+| Folder permissions | `775` |
+| Test file | Created |
+| File ownership | `root:audit_team` |
+| File permissions | `664` |
+| Cross-user access | Tested |
+| Access issue | Identified |
+| Finding note | Created |
+
+### Commands used
+
+```bash
+sudo mkdir -p /opt/audit-share
+sudo chown root:audit_team /opt/audit-share
+sudo chmod 775 /opt/audit-share
+ls -ld /opt/audit-share
+
+echo "This is a safe lab audit test file." | sudo tee /opt/audit-share/audit-note.txt
+sudo chown root:audit_team /opt/audit-share/audit-note.txt
+sudo chmod 664 /opt/audit-share/audit-note.txt
+ls -l /opt/audit-share
+
+sudo -u audituser cat /opt/audit-share/audit-note.txt
+sudo -u contractor1 cat /opt/audit-share/audit-note.txt
+sudo -u olduser cat /opt/audit-share/audit-note.txt
+
+ls -ld /opt/audit-share
+ls -l /opt/audit-share/audit-note.txt
+id audituser
+id contractor1
+id olduser
+
+echo "Finding: /opt/audit-share allows users outside audit_team to read audit-note.txt."
+echo "Risk: Users who are not intended audit team members may access shared audit content."
+echo "Recommendation: Restrict folder and file permissions to the intended group only."
+```
+
+### Command purpose
+
+| Command | Purpose |
+| --- | --- |
+| `sudo mkdir -p /opt/audit-share` | Creates the controlled test folder for the access issue scenario. |
+| `sudo chown root:audit_team /opt/audit-share` | Sets the folder owner to `root` and group to `audit_team`. |
+| `sudo chmod 775 /opt/audit-share` | Gives owner and group full access while allowing others to read and enter the folder. |
+| `ls -ld /opt/audit-share` | Shows ownership and permissions for the folder itself. |
+| `echo "This is a safe lab audit test file."` | Prints safe lab test content. |
+| `sudo tee /opt/audit-share/audit-note.txt` | Writes the test content to a file using administrator rights. |
+| `sudo chown root:audit_team /opt/audit-share/audit-note.txt` | Sets the file owner to `root` and group to `audit_team`. |
+| `sudo chmod 664 /opt/audit-share/audit-note.txt` | Allows owner and group to read/write while allowing others to read the file. |
+| `ls -l /opt/audit-share` | Lists the file and its permissions inside the test folder. |
+| `sudo -u audituser cat /opt/audit-share/audit-note.txt` | Tests whether `audituser` can read the test file. |
+| `sudo -u contractor1 cat /opt/audit-share/audit-note.txt` | Tests whether `contractor1` can read the test file. |
+| `sudo -u olduser cat /opt/audit-share/audit-note.txt` | Tests whether `olduser` can read the test file. |
+| `ls -l /opt/audit-share/audit-note.txt` | Shows the test file permissions directly. |
+| `id audituser` | Shows group memberships for `audituser`. |
+| `id contractor1` | Shows group memberships for `contractor1`. |
+| `id olduser` | Shows group memberships for `olduser`. |
+| `echo "Finding: ..."` | Documents the access finding. |
+| `echo "Risk: ..."` | Documents the risk of the finding. |
+| `echo "Recommendation: ..."` | Documents the recommended action. |
+
+### Notes
+
+This part demonstrates how a permission issue can be created and identified safely in a lab environment.
+
+The folder permission `775` allowed users outside the intended group to enter the folder.
+
+The file permission `664` allowed users outside the intended group to read the test file.
+
+The issue was confirmed by testing access as multiple users and comparing that access with each user’s group membership.
+
+In a real environment, this type of issue should be reviewed and corrected if the content is intended only for a specific group.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-07b-linux-audit-share-test-file-created.png](screenshots/screenshot-07b-linux-audit-share-test-file-created.png)
+
+![screenshot-07c-linux-audit-share-cross-user-access.png](screenshots/screenshot-07c-linux-audit-share-cross-user-access.png)
+
+![screenshot-07d-linux-audit-share-issue-identified.png](screenshots/screenshot-07d-linux-audit-share-issue-identified.png)
+
+![screenshot-07e-linux-audit-share-finding-note.png](screenshots/screenshot-07e-linux-audit-share-finding-note.png)
+

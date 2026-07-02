@@ -49,7 +49,7 @@ The goals of this lab are to:
 | Part 4  | Review user and group files     | Complete |
 | Part 5  | Audit sudo access               | Complete |
 | Part 6  | Check home folder permissions   | Complete |
-| Part 7  | Create and find an access issue | Planned  |
+| Part 7  | Create and find an access issue | Complete |
 | Part 8  | Review login history            | Planned  |
 | Part 9  | Review failed login attempts    | Planned  |
 | Part 10 | Create access audit report      | Planned  |
@@ -86,7 +86,12 @@ Linux-User-Access-Audit-Lab/
 │   ├── screenshot-06a-linux-home-folder-permissions.png
 │   ├── screenshot-06b-linux-home-folder-content-review.png
 │   ├── screenshot-06c-linux-home-folder-cross-access-test.png
-│   └── screenshot-06d-linux-home-folder-audit-note.png
+│   ├── screenshot-06d-linux-home-folder-audit-note.png
+│   ├── screenshot-07a-linux-audit-share-created.png
+│   ├── screenshot-07b-linux-audit-share-test-file-created.png
+│   ├── screenshot-07c-linux-audit-share-cross-user-access.png
+│   ├── screenshot-07d-linux-audit-share-issue-identified.png
+│   └── screenshot-07e-linux-audit-share-finding-note.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -117,7 +122,9 @@ Sudo access was reviewed. The current lab user sudo permissions were checked wit
 
 Home folder permissions were reviewed for `audituser`, `contractor1` and `olduser`. Folder ownership and permissions were checked, home folder contents were reviewed safely, and cross-user access testing was performed with `sudo -u`.
 
-The next step is to create and identify an access issue.
+A controlled access issue was created and identified. The `/opt/audit-share` folder and `audit-note.txt` file were configured with permissions that allowed users outside the intended `audit_team` group to read the test file. The issue was verified by testing access as multiple users and documented as a finding with risk and recommendation notes.
+
+The next step is to review login history.
 
 ---
 
@@ -145,6 +152,9 @@ This project will demonstrate:
 * Safe sudoers file review
 * Home folder permission auditing
 * Cross-user access testing
+* Shared folder permission review
+* Access issue identification
+* Finding, risk and recommendation documentation
 * Markdown documentation
 * Screenshot-based evidence collection
 * Git and GitHub workflow
@@ -559,6 +569,86 @@ Screenshot links:
 [screenshot-06c-linux-home-folder-cross-access-test.png](screenshots/screenshot-06c-linux-home-folder-cross-access-test.png)
 
 [screenshot-06d-linux-home-folder-audit-note.png](screenshots/screenshot-06d-linux-home-folder-audit-note.png)
+
+
+---
+
+## Part 7 — Create and identify an access issue
+
+Status: Complete
+
+This part created a controlled access issue and then identified it through permission review and cross-user access testing.
+
+Test location used:
+
+```text
+/opt/audit-share
+```
+
+Commands used:
+
+```bash
+sudo mkdir -p /opt/audit-share
+sudo chown root:audit_team /opt/audit-share
+sudo chmod 775 /opt/audit-share
+ls -ld /opt/audit-share
+
+echo "This is a safe lab audit test file." | sudo tee /opt/audit-share/audit-note.txt
+sudo chown root:audit_team /opt/audit-share/audit-note.txt
+sudo chmod 664 /opt/audit-share/audit-note.txt
+ls -l /opt/audit-share
+
+sudo -u audituser cat /opt/audit-share/audit-note.txt
+sudo -u contractor1 cat /opt/audit-share/audit-note.txt
+sudo -u olduser cat /opt/audit-share/audit-note.txt
+
+ls -ld /opt/audit-share
+ls -l /opt/audit-share/audit-note.txt
+id audituser
+id contractor1
+id olduser
+
+echo "Finding: /opt/audit-share allows users outside audit_team to read audit-note.txt."
+echo "Risk: Users who are not intended audit team members may access shared audit content."
+echo "Recommendation: Restrict folder and file permissions to the intended group only."
+```
+
+Results:
+
+* Created the `/opt/audit-share` test folder.
+* Set folder ownership to `root:audit_team`.
+* Set folder permissions to `775`.
+* Created the safe test file `audit-note.txt`.
+* Set file ownership to `root:audit_team`.
+* Set file permissions to `664`.
+* Tested file access as `audituser`.
+* Tested file access as `contractor1`.
+* Tested file access as `olduser`.
+* Reviewed folder permissions, file permissions and user group memberships.
+* Identified that users outside the intended `audit_team` group could read the test file.
+* Documented the finding, risk and recommendation.
+
+Notes:
+
+This part demonstrates how an access issue can be created and identified in a controlled lab environment.
+
+The issue was caused by permissive folder and file permissions. The folder permission `775` allowed other users to enter the folder, and the file permission `664` allowed other users to read the file.
+
+The test data was safe lab content only. No real personal data, credentials, secrets or production files were used.
+
+In a real environment, shared folders and files should be reviewed to confirm that access is limited to the intended users or groups.
+
+Screenshot links:
+
+[screenshot-07a-linux-audit-share-created.png](screenshots/screenshot-07a-linux-audit-share-created.png)
+
+[screenshot-07b-linux-audit-share-test-file-created.png](screenshots/screenshot-07b-linux-audit-share-test-file-created.png)
+
+[screenshot-07c-linux-audit-share-cross-user-access.png](screenshots/screenshot-07c-linux-audit-share-cross-user-access.png)
+
+[screenshot-07d-linux-audit-share-issue-identified.png](screenshots/screenshot-07d-linux-audit-share-issue-identified.png)
+
+[screenshot-07e-linux-audit-share-finding-note.png](screenshots/screenshot-07e-linux-audit-share-finding-note.png)
 
 
 ## Notes
