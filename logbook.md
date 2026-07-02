@@ -910,3 +910,85 @@ Screenshots:
 
 ![screenshot-09e-linux-failed-login-audit-note.png](screenshots/screenshot-09e-linux-failed-login-audit-note.png)
 
+---
+
+## 2026-07-02 — Part 10: Create access audit report
+
+### Goal
+
+Create a final access audit report summarizing the Linux User Access Audit Lab.
+
+### Work completed
+
+* Created the final audit report in the `results` folder.
+* Summarized the user access audit scope.
+* Documented the system, lab user, test users and groups reviewed.
+* Summarized the work completed during the access audit.
+* Documented the controlled permission issue found in `/opt/audit-share`.
+* Added observations for sudo access, home folder permissions, login history and failed login attempts.
+* Added recommended actions for a real environment.
+* Added an evidence list linking the report to screenshots from the lab.
+* Verified that the report file exists.
+* Verified the report content from the terminal.
+* Reviewed Git status before committing the work.
+
+### Verification results
+
+| Item | Result |
+| --- | --- |
+| Report folder | Reviewed |
+| Report file | Created |
+| Report content | Verified |
+| Report location | `results/linux-user-access-audit-report.md` |
+| Git status | Reviewed |
+| Sensitive data exposed | No |
+
+### Commands used
+
+```powershell
+New-Item results\linux-user-access-audit-report.md
+code results\linux-user-access-audit-report.md
+Get-ChildItem results
+Get-Content results\linux-user-access-audit-report.md | Select-Object -First 40
+git status
+```
+
+### Command purpose
+
+| Command | Purpose |
+| --- | --- |
+| `New-Item results\linux-user-access-audit-report.md` | Creates the final Markdown audit report file in the `results` folder. |
+| `code results\linux-user-access-audit-report.md` | Opens the report file in VS Code for editing. |
+| `Get-ChildItem results` | Lists the contents of the `results` folder and confirms that the report file exists. |
+| `Get-Content results\linux-user-access-audit-report.md` | Reads the audit report content from the terminal. |
+| `Select-Object -First 40` | Shows only the first 40 lines of the report so the output remains readable. |
+| `git status` | Shows which project files are new or changed before committing. |
+
+### Notes
+
+This part created the final written audit report for the project.
+
+The report summarizes the account review, group review, sudo access review, home folder permission review, controlled access issue, successful login history review and failed login attempt review.
+
+The controlled finding from `/opt/audit-share` was documented with severity, risk, evidence and recommendation.
+
+The report was saved in the `results` folder because it is a final project output rather than a screenshot or script.
+
+No real personal data, passwords, SSH keys, tokens, production files or secrets were included.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-10a-linux-access-audit-report-created.png](screenshots/screenshot-10a-linux-access-audit-report-created.png)
+
+![screenshot-10b-linux-access-audit-report-content.png](screenshots/screenshot-10b-linux-access-audit-report-content.png)
+
+![screenshot-10c-linux-access-audit-report-git-status.png](screenshots/screenshot-10c-linux-access-audit-report-git-status.png)
+
+### Result
+
+The final Linux user access audit report was created successfully.
+
+The report now provides a professional summary of the completed audit work, the controlled finding, audit observations, recommended actions and evidence gathered during the lab.
+

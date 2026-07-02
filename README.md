@@ -52,7 +52,7 @@ The goals of this lab are to:
 | Part 7  | Create and find an access issue | Complete |
 | Part 8  | Review login history            | Complete |
 | Part 9  | Review failed login attempts    | Complete |
-| Part 10 | Create access audit report      | Planned  |
+| Part 10 | Create access audit report      | Complete |
 | Part 11 | Final README and GitHub polish  | Planned  |
 
 ---
@@ -64,7 +64,8 @@ Linux-User-Access-Audit-Lab/
 ├── docs/
 │   └── .gitkeep
 ├── results/
-│   └── .gitkeep
+│   ├── .gitkeep
+│   └── linux-user-access-audit-report.md
 ├── screenshots/
 │   ├── .gitkeep
 │   ├── screenshot-01-project-structure.png
@@ -101,7 +102,10 @@ Linux-User-Access-Audit-Lab/
 │   ├── screenshot-09b-linux-test-user-failed-login-review.png
 │   ├── screenshot-09c-linux-ssh-authentication-log-review.png
 │   ├── screenshot-09d-linux-failed-login-tools-review.png
-│   └── screenshot-09e-linux-failed-login-audit-note.png
+│   ├── screenshot-09e-linux-failed-login-audit-note.png
+│   ├── screenshot-10a-linux-access-audit-report-created.png
+│   ├── screenshot-10b-linux-access-audit-report-content.png
+│   └── screenshot-10c-linux-access-audit-report-git-status.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -138,7 +142,9 @@ Successful login history was reviewed with `last`. Login history for the lab use
 
 Failed login attempts were reviewed with `faillock`. Failed login records for the lab users were checked, SSH authentication logs were reviewed with `journalctl`, and the failed-login review tools were verified. A failed-login audit note was created to document the review method and security purpose.
 
-The next step is to create an access audit report.
+The access audit report has been created in `results/linux-user-access-audit-report.md`. The report summarizes the project scope, systems and accounts reviewed, the controlled permission finding, observations, recommended actions and evidence gathered during the lab.
+
+The next step is final README and GitHub polish.
 
 ---
 
@@ -175,6 +181,8 @@ This project will demonstrate:
 * Failed login record review
 * SSH authentication log review
 * Failed-login tool verification
+* Access audit report creation
+* Finding and recommendation reporting
 * Markdown documentation
 * Screenshot-based evidence collection
 * Git and GitHub workflow
@@ -189,6 +197,7 @@ Main documentation files:
 | ------------ | ---------------------------- |
 | `README.md`  | Main GitHub project overview |
 | `logbook.md` | Step-by-step project notes   |
+| `results/linux-user-access-audit-report.md` | Final access audit report |
 
 Screenshot evidence is stored in the `screenshots/` folder.
 
@@ -226,6 +235,14 @@ Current screenshot evidence:
 | `screenshot-08c-linux-current-login-sessions.png` | Current login sessions reviewed |
 | `screenshot-08d-linux-lastlog-summary.png` | Last login summary reviewed |
 | `screenshot-08e-linux-login-history-audit-note.png` | Login history audit note created |
+| `screenshot-09a-linux-failed-login-summary.png` | Failed login records reviewed |
+| `screenshot-09b-linux-test-user-failed-login-review.png` | Test user failed login records reviewed |
+| `screenshot-09c-linux-ssh-authentication-log-review.png` | SSH authentication logs reviewed |
+| `screenshot-09d-linux-failed-login-tools-review.png` | Failed-login tools verified |
+| `screenshot-09e-linux-failed-login-audit-note.png` | Failed-login audit note created |
+| `screenshot-10a-linux-access-audit-report-created.png` | Access audit report file created |
+| `screenshot-10b-linux-access-audit-report-content.png` | Access audit report content reviewed |
+| `screenshot-10c-linux-access-audit-report-git-status.png` | Git status reviewed before report commit |
 
 Command results and verification output may be stored in:
 
@@ -812,6 +829,64 @@ Screenshot links:
 [screenshot-09d-linux-failed-login-tools-review.png](screenshots/screenshot-09d-linux-failed-login-tools-review.png)
 
 [screenshot-09e-linux-failed-login-audit-note.png](screenshots/screenshot-09e-linux-failed-login-audit-note.png)
+
+---
+
+## Part 10 — Create access audit report
+
+Status: Complete
+
+This part created the final Linux user access audit report.
+
+Report file:
+
+```text
+results/linux-user-access-audit-report.md
+```
+
+Commands used:
+
+```powershell
+New-Item results\linux-user-access-audit-report.md
+code results\linux-user-access-audit-report.md
+Get-ChildItem results
+Get-Content results\linux-user-access-audit-report.md | Select-Object -First 40
+git status
+```
+
+Results:
+
+* Created the final audit report in the `results` folder.
+* Documented the audit scope.
+* Documented the system, lab user, test users and groups reviewed.
+* Summarized the work performed during Parts 1–9.
+* Documented the controlled audit-share permission issue as a finding.
+* Added observations for sudo access, home folder permissions, successful login history and failed login review.
+* Added recommended actions for a real environment.
+* Added an evidence list linking the report to screenshot proof.
+* Verified that the report file exists.
+* Verified the report content from the terminal.
+* Reviewed Git status before commit.
+
+Notes:
+
+This report is the final written result of the access audit.
+
+The screenshots provide evidence of the technical work, while the report summarizes the scope, finding, observations, recommendations and conclusion in a professional format.
+
+README screenshot references use normal Markdown links. The logbook uses visible image embeds.
+
+Screenshot links:
+
+[screenshot-10a-linux-access-audit-report-created.png](screenshots/screenshot-10a-linux-access-audit-report-created.png)
+
+[screenshot-10b-linux-access-audit-report-content.png](screenshots/screenshot-10b-linux-access-audit-report-content.png)
+
+[screenshot-10c-linux-access-audit-report-git-status.png](screenshots/screenshot-10c-linux-access-audit-report-git-status.png)
+
+Report link:
+
+[linux-user-access-audit-report.md](results/linux-user-access-audit-report.md)
 
 
 ## Notes
