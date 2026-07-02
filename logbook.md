@@ -902,8 +902,6 @@ Screenshots:
 
 ![screenshot-09a-linux-failed-login-summary.png](screenshots/screenshot-09a-linux-failed-login-summary.png)
 
-![screenshot-09b-linux-test-user-failed-login-review.png](screenshots/screenshot-09b-linux-test-user-failed-login-review.png)
-
 ![screenshot-09c-linux-ssh-authentication-log-review.png](screenshots/screenshot-09c-linux-ssh-authentication-log-review.png)
 
 ![screenshot-09d-linux-failed-login-tools-review.png](screenshots/screenshot-09d-linux-failed-login-tools-review.png)
@@ -991,4 +989,76 @@ Screenshots:
 The final Linux user access audit report was created successfully.
 
 The report now provides a professional summary of the completed audit work, the controlled finding, audit observations, recommended actions and evidence gathered during the lab.
+
+---
+
+## 2026-07-02 — Part 11: Final README and GitHub polish
+
+### Goal
+
+Finalize the Linux User Access Audit Lab documentation for GitHub and portfolio use.
+
+### Work completed
+
+* Reviewed the README after the access audit report was created.
+* Updated the README to show the project as complete.
+* Added a short portfolio summary to the README.
+* Confirmed that the final report is listed in the project structure.
+* Confirmed that the Part 10 screenshots are listed in the project structure.
+* Confirmed that README screenshot references use normal Markdown links.
+* Confirmed that logbook screenshot references use visible image embeds.
+* Confirmed that the final report is linked from the README.
+* Prepared the repository for the final commit and push.
+
+### Verification results
+
+| Item | Result |
+| --- | --- |
+| README status | Finalized |
+| Logbook status | Finalized |
+| Final report link | Added |
+| Project structure | Updated |
+| Screenshot references | Reviewed |
+| GitHub portfolio readiness | Complete |
+| Sensitive data exposed | No |
+
+### Commands used
+
+```powershell
+git status
+Get-ChildItem results
+Get-ChildItem screenshots\screenshot-10*.png
+git add .
+git commit -m "Finalize Linux user access audit lab"
+git push
+git status
+```
+
+### Command purpose
+
+| Command | Purpose |
+| --- | --- |
+| `git status` | Shows which files are changed, new or ready to commit. |
+| `Get-ChildItem results` | Lists the final report output in the `results` folder. |
+| `Get-ChildItem screenshots\screenshot-10*.png` | Confirms that the Part 10 screenshot evidence files exist. |
+| `git add .` | Stages all changed files for the final commit. |
+| `git commit -m "Finalize Linux user access audit lab"` | Saves the finalized documentation and evidence into Git history. |
+| `git push` | Uploads the final commit to GitHub. |
+| Final `git status` | Confirms that the working tree is clean after pushing. |
+
+### Notes
+
+This final polish step prepares the project for public viewing on GitHub.
+
+The README now functions as the main portfolio overview.
+
+The logbook remains the detailed step-by-step evidence record.
+
+The final audit report remains in the `results` folder as the professional written outcome of the lab.
+
+No real personal data, passwords, SSH keys, tokens, production files or secrets were included.
+
+### Result
+
+The Linux User Access Audit Lab is complete and ready for portfolio presentation.
 
