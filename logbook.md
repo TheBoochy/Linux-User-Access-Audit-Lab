@@ -403,9 +403,201 @@ Sensitive files were reviewed safely by checking file permissions only. The cont
 
 Screenshots:
 
+![screenshot-04a-linux-passwd-file-review.png](screenshots/screenshot-04a-linux-passwd-file-review.png)
 
 ![screenshot-04b-linux-group-file-review.png](screenshots/screenshot-04b-linux-group-file-review.png)
 
 ![screenshot-04c-linux-sensitive-account-files-review.png](screenshots/screenshot-04c-linux-sensitive-account-files-review.png)
 
 ![screenshot-04d-linux-account-files-purpose.png](screenshots/screenshot-04d-linux-account-files-purpose.png)
+
+---
+
+## 2026-07-01 — Part 5: Audit sudo access
+
+### Goal
+
+Review sudo access, admin-related group membership and sudoers file locations safely.
+
+### Work completed
+
+* Reviewed the current logged-in user.
+* Reviewed current user group memberships.
+* Reviewed current user sudo permissions.
+* Reviewed common admin-related groups.
+* Reviewed lab access groups.
+* Reviewed sudo permissions for `audituser`.
+* Reviewed sudo permissions for `contractor1`.
+* Reviewed sudo permissions for `olduser`.
+* Reviewed `/etc/sudoers` ownership and permissions safely.
+* Reviewed `/etc/sudoers.d` ownership and permissions safely.
+* Reviewed files inside `/etc/sudoers.d` safely.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item | Result |
+| --- | --- |
+| Current user | Reviewed |
+| Current user groups | Reviewed |
+| Current user sudo access | Reviewed |
+| Admin-related groups | Reviewed |
+| Test user sudo access | Reviewed |
+| `/etc/sudoers` permissions | Reviewed safely |
+| `/etc/sudoers.d` permissions | Reviewed safely |
+| Sensitive sudoers contents exposed | No |
+
+### Commands used
+
+```bash
+whoami
+groups
+sudo -l
+
+getent group wheel
+getent group sudo
+getent group adm
+getent group audit_team
+getent group contractors
+getent group disabled_test
+
+sudo -l -U audituser
+sudo -l -U contractor1
+sudo -l -U olduser
+
+sudo ls -l /etc/sudoers
+sudo ls -ld /etc/sudoers.d
+sudo ls -l /etc/sudoers.d
+```
+
+### Command purpose
+
+| Command | Purpose |
+| --- | --- |
+| `whoami` | Shows the current logged-in user. |
+| `groups` | Shows the current user’s group memberships. |
+| `sudo -l` | Shows sudo permissions for the current user. |
+| `getent group wheel` | Reviews the common RHEL/Fedora admin group. |
+| `getent group sudo` | Reviews the common Debian/Ubuntu admin group. |
+| `getent group adm` | Reviews a common admin/log-related group. |
+| `getent group audit_team` | Reviews the lab audit group. |
+| `getent group contractors` | Reviews the lab contractor group. |
+| `getent group disabled_test` | Reviews the lab disabled-test group. |
+| `sudo -l -U audituser` | Reviews sudo permissions for `audituser`. |
+| `sudo -l -U contractor1` | Reviews sudo permissions for `contractor1`. |
+| `sudo -l -U olduser` | Reviews sudo permissions for `olduser`. |
+| `sudo ls -l /etc/sudoers` | Shows sudoers file ownership and permissions without displaying contents. |
+| `sudo ls -ld /etc/sudoers.d` | Shows ownership and permissions for the sudoers include directory. |
+| `sudo ls -l /etc/sudoers.d` | Lists sudoers include files safely. |
+
+### Notes
+
+This part demonstrates basic sudo access auditing.
+
+Sudo access is important to review because it can allow users to run commands with elevated privileges.
+
+The test users were checked individually to confirm whether they had sudo permissions.
+
+Sudoers file locations were reviewed safely by checking file ownership and permissions only. The contents of `/etc/sudoers` were not displayed or documented.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-05a-linux-current-user-sudo-access.png](screenshots/screenshot-05a-linux-current-user-sudo-access.png)
+
+![screenshot-05b-linux-admin-groups-review.png](screenshots/screenshot-05b-linux-admin-groups-review.png)
+
+![screenshot-05c-linux-test-users-sudo-review.png](screenshots/screenshot-05c-linux-test-users-sudo-review.png)
+
+![screenshot-05d-linux-sudoers-files-review.png](screenshots/screenshot-05d-linux-sudoers-files-review.png)
+
+---
+
+## 2026-07-01 — Part 6: Check home folder permissions
+
+### Goal
+
+Review home folder ownership, permissions, contents and cross-user access behavior.
+
+### Work completed
+
+* Reviewed `/home` ownership and permissions.
+* Reviewed `/home/audituser` ownership and permissions.
+* Reviewed `/home/contractor1` ownership and permissions.
+* Reviewed `/home/olduser` ownership and permissions.
+* Reviewed home folder contents safely with administrator access.
+* Tested cross-user access to home folders.
+* Created an audit note about home folder permission review.
+* Saved screenshot evidence.
+
+### Verification results
+
+| Item | Result |
+| --- | --- |
+| `/home` permissions | Reviewed |
+| `audituser` home folder | Reviewed |
+| `contractor1` home folder | Reviewed |
+| `olduser` home folder | Reviewed |
+| Home folder contents | Reviewed safely |
+| Cross-user access | Tested |
+| Audit note | Created |
+
+### Commands used
+
+```bash
+ls -ld /home
+ls -ld /home/audituser
+ls -ld /home/contractor1
+ls -ld /home/olduser
+
+sudo ls -la /home/audituser | head -20
+sudo ls -la /home/contractor1 | head -20
+sudo ls -la /home/olduser | head -20
+
+sudo -u audituser ls /home/contractor1
+sudo -u contractor1 ls /home/audituser
+sudo -u olduser ls /home/audituser
+
+echo "Home folder permissions were reviewed for audituser, contractor1 and olduser."
+echo "Cross-user access testing was performed using sudo -u."
+echo "Any world-readable home folder permissions should be reviewed in a real environment."
+```
+
+### Command purpose
+
+| Command | Purpose |
+| --- | --- |
+| `ls -ld /home` | Shows ownership and permissions for the `/home` directory. |
+| `ls -ld /home/audituser` | Shows ownership and permissions for the `audituser` home folder. |
+| `ls -ld /home/contractor1` | Shows ownership and permissions for the `contractor1` home folder. |
+| `ls -ld /home/olduser` | Shows ownership and permissions for the `olduser` home folder. |
+| `sudo ls -la /home/audituser \| head -20` | Reviews `audituser` home folder contents safely as administrator. |
+| `sudo ls -la /home/contractor1 \| head -20` | Reviews `contractor1` home folder contents safely as administrator. |
+| `sudo ls -la /home/olduser \| head -20` | Reviews `olduser` home folder contents safely as administrator. |
+| `sudo -u audituser ls /home/contractor1` | Tests whether `audituser` can access `contractor1` home folder. |
+| `sudo -u contractor1 ls /home/audituser` | Tests whether `contractor1` can access `audituser` home folder. |
+| `sudo -u olduser ls /home/audituser` | Tests whether `olduser` can access `audituser` home folder. |
+| `echo ...` | Creates a clear audit note about the home folder permission review. |
+
+### Notes
+
+This part demonstrates basic home folder permission auditing.
+
+Home folders can contain user-specific data, so ownership and permissions should be reviewed during access audits.
+
+Cross-user access testing helps identify whether users can access home folders that may not be intended for them.
+
+In a real environment, world-readable home folder permissions should be reviewed carefully because they may expose user files or configuration data.
+
+### Evidence
+
+Screenshots:
+
+![screenshot-06a-linux-home-folder-permissions.png](screenshots/screenshot-06a-linux-home-folder-permissions.png)
+
+![screenshot-06b-linux-home-folder-content-review.png](screenshots/screenshot-06b-linux-home-folder-content-review.png)
+
+![screenshot-06c-linux-home-folder-cross-access-test.png](screenshots/screenshot-06c-linux-home-folder-cross-access-test.png)
+
+![screenshot-06d-linux-home-folder-audit-note.png](screenshots/screenshot-06d-linux-home-folder-audit-note.png)

@@ -47,8 +47,8 @@ The goals of this lab are to:
 | Part 2  | Linux account baseline          | Complete |
 | Part 3  | Create test users and groups    | Complete |
 | Part 4  | Review user and group files     | Complete |
-| Part 5  | Audit sudo access               | Planned  |
-| Part 6  | Check home folder permissions   | Planned  |
+| Part 5  | Audit sudo access               | Complete |
+| Part 6  | Check home folder permissions   | Complete |
 | Part 7  | Create and find an access issue | Planned  |
 | Part 8  | Review login history            | Planned  |
 | Part 9  | Review failed login attempts    | Planned  |
@@ -78,7 +78,15 @@ Linux-User-Access-Audit-Lab/
 │   ├── screenshot-04a-linux-passwd-file-review.png
 │   ├── screenshot-04b-linux-group-file-review.png
 │   ├── screenshot-04c-linux-sensitive-account-files-review.png
-│   └── screenshot-04d-linux-account-files-purpose.png
+│   ├── screenshot-04d-linux-account-files-purpose.png
+│   ├── screenshot-05a-linux-current-user-sudo-access.png
+│   ├── screenshot-05b-linux-admin-groups-review.png
+│   ├── screenshot-05c-linux-test-users-sudo-review.png
+│   ├── screenshot-05d-linux-sudoers-files-review.png
+│   ├── screenshot-06a-linux-home-folder-permissions.png
+│   ├── screenshot-06b-linux-home-folder-content-review.png
+│   ├── screenshot-06c-linux-home-folder-cross-access-test.png
+│   └── screenshot-06d-linux-home-folder-audit-note.png
 ├── scripts/
 │   └── .gitkeep
 ├── logbook.md
@@ -105,7 +113,11 @@ Test users and groups were created for access audit scenarios. The lab users `au
 
 User and group database files were reviewed. The `/etc/passwd` and `/etc/group` files were checked safely, and the lab user and group entries were reviewed with `getent`. Sensitive account files `/etc/shadow` and `/etc/gshadow` were reviewed safely by checking file ownership and permissions only, without exposing sensitive file contents.
 
-The next step is to audit sudo access.
+Sudo access was reviewed. The current lab user sudo permissions were checked with `sudo -l`, admin-related groups were reviewed with `getent group`, test user sudo permissions were checked with `sudo -l -U`, and sudoers file locations were reviewed safely without displaying sensitive configuration contents.
+
+Home folder permissions were reviewed for `audituser`, `contractor1` and `olduser`. Folder ownership and permissions were checked, home folder contents were reviewed safely, and cross-user access testing was performed with `sudo -u`.
+
+The next step is to create and identify an access issue.
 
 ---
 
@@ -128,6 +140,11 @@ This project will demonstrate:
 * Access auditing
 * Login history review
 * Failed login review
+* Sudo permission review
+* Admin group review
+* Safe sudoers file review
+* Home folder permission auditing
+* Cross-user access testing
 * Markdown documentation
 * Screenshot-based evidence collection
 * Git and GitHub workflow
@@ -161,6 +178,14 @@ Current screenshot evidence:
 | `screenshot-04b-linux-group-file-review.png`              | `/etc/group` file and test group entries reviewed  |
 | `screenshot-04c-linux-sensitive-account-files-review.png` | Sensitive account file permissions reviewed safely |
 | `screenshot-04d-linux-account-files-purpose.png`          | Account file purpose summary reviewed              |
+| `screenshot-05a-linux-current-user-sudo-access.png` | Current lab user sudo access reviewed |
+| `screenshot-05b-linux-admin-groups-review.png` | Admin-related groups reviewed |
+| `screenshot-05c-linux-test-users-sudo-review.png` | Test user sudo access reviewed |
+| `screenshot-05d-linux-sudoers-files-review.png` | Sudoers file locations reviewed safely |
+| `screenshot-06a-linux-home-folder-permissions.png` | Home folder permissions reviewed |
+| `screenshot-06b-linux-home-folder-content-review.png` | Home folder contents reviewed safely |
+| `screenshot-06c-linux-home-folder-cross-access-test.png` | Cross-user home folder access tested |
+| `screenshot-06d-linux-home-folder-audit-note.png` | Home folder audit note created |
 
 Command results and verification output may be stored in:
 
@@ -402,6 +427,139 @@ Screenshot links:
 [screenshot-04d-linux-account-files-purpose.png](screenshots/screenshot-04d-linux-account-files-purpose.png)
 
 ---
+
+## Part 5 — Audit sudo access
+
+Status: Complete
+
+This part reviewed sudo access and admin-related group membership.
+
+Commands used:
+
+```bash
+whoami
+groups
+sudo -l
+
+getent group wheel
+getent group sudo
+getent group adm
+getent group audit_team
+getent group contractors
+getent group disabled_test
+
+sudo -l -U audituser
+sudo -l -U contractor1
+sudo -l -U olduser
+
+sudo ls -l /etc/sudoers
+sudo ls -ld /etc/sudoers.d
+sudo ls -l /etc/sudoers.d
+```
+
+Results:
+
+* Reviewed the current logged-in user.
+* Reviewed the current user’s group memberships.
+* Reviewed the current user’s sudo permissions with `sudo -l`.
+* Reviewed common admin-related groups such as `wheel`, `sudo` and `adm`.
+* Reviewed lab groups used in this project.
+* Reviewed sudo permissions for `audituser`.
+* Reviewed sudo permissions for `contractor1`.
+* Reviewed sudo permissions for `olduser`.
+* Reviewed `/etc/sudoers` ownership and permissions safely.
+* Reviewed `/etc/sudoers.d` ownership and permissions safely.
+* Reviewed files inside `/etc/sudoers.d` safely.
+
+Notes:
+
+This part demonstrates basic sudo access auditing.
+
+The `sudo -l` command was used to review sudo permissions for the current lab user.
+
+The `sudo -l -U` command was used to review sudo permissions for specific test users.
+
+The sudoers file locations were reviewed safely with `ls` commands. The contents of `/etc/sudoers` were not displayed or documented.
+
+Screenshot links:
+
+[screenshot-05a-linux-current-user-sudo-access.png](screenshots/screenshot-05a-linux-current-user-sudo-access.png)
+
+[screenshot-05b-linux-admin-groups-review.png](screenshots/screenshot-05b-linux-admin-groups-review.png)
+
+[screenshot-05c-linux-test-users-sudo-review.png](screenshots/screenshot-05c-linux-test-users-sudo-review.png)
+
+[screenshot-05d-linux-sudoers-files-review.png](screenshots/screenshot-05d-linux-sudoers-files-review.png)
+
+---
+
+## Part 6 — Check home folder permissions
+
+Status: Complete
+
+This part reviewed home folder ownership, permissions and cross-user access behavior.
+
+Home folders reviewed:
+
+```text
+/home/audituser
+/home/contractor1
+/home/olduser
+```
+
+Commands used:
+
+```bash
+ls -ld /home
+ls -ld /home/audituser
+ls -ld /home/contractor1
+ls -ld /home/olduser
+
+sudo ls -la /home/audituser | head -20
+sudo ls -la /home/contractor1 | head -20
+sudo ls -la /home/olduser | head -20
+
+sudo -u audituser ls /home/contractor1
+sudo -u contractor1 ls /home/audituser
+sudo -u olduser ls /home/audituser
+
+echo "Home folder permissions were reviewed for audituser, contractor1 and olduser."
+echo "Cross-user access testing was performed using sudo -u."
+echo "Any world-readable home folder permissions should be reviewed in a real environment."
+```
+
+Results:
+
+* Reviewed `/home` ownership and permissions.
+* Reviewed `/home/audituser` ownership and permissions.
+* Reviewed `/home/contractor1` ownership and permissions.
+* Reviewed `/home/olduser` ownership and permissions.
+* Reviewed home folder contents safely with administrator access.
+* Tested whether `audituser` could access `contractor1` home folder.
+* Tested whether `contractor1` could access `audituser` home folder.
+* Tested whether `olduser` could access `audituser` home folder.
+* Created an audit note about reviewing world-readable home folder permissions.
+
+Notes:
+
+This part demonstrates basic home folder permission auditing.
+
+Home folders can contain user-specific files, so ownership and permissions should be reviewed during an access audit.
+
+Cross-user access testing helps identify whether users can access folders that may not be intended for them.
+
+In a real environment, world-readable home folder permissions should be reviewed carefully because they may expose user files or configuration data.
+
+Screenshot links:
+
+[screenshot-06a-linux-home-folder-permissions.png](screenshots/screenshot-06a-linux-home-folder-permissions.png)
+
+[screenshot-06b-linux-home-folder-content-review.png](screenshots/screenshot-06b-linux-home-folder-content-review.png)
+
+[screenshot-06c-linux-home-folder-cross-access-test.png](screenshots/screenshot-06c-linux-home-folder-cross-access-test.png)
+
+[screenshot-06d-linux-home-folder-audit-note.png](screenshots/screenshot-06d-linux-home-folder-audit-note.png)
+
 
 ## Notes
 
